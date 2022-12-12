@@ -25,7 +25,7 @@ export class UsersService {
 
   findOne = async (id: string): Promise<User> => {
     try {
-      const user = this.userModel.findById(id);
+      const user = this.userModel.findById(id).select('-password');
       if (!user) {
         throw new Error('User not found');
       }
@@ -42,12 +42,20 @@ export class UsersService {
     username,
   }: QueryUserDto): Promise<User[]> => {
     try {
-      return this.userModel
-        .find({
-          ...(username && { username: { $regex: username, $options: 'img' } }),
-        })
-        .skip(offset)
-        .limit(limit);
+      let query = [
+        {
+          $match: {
+            ...(username && {
+              username: { $regex: username, $options: 'img' },
+            }),
+          },
+        },
+        offset && { $skip: offset },
+        limit && { $limit: limit },
+      ];
+      query = query.filter((item) => item !== undefined);
+
+      return this.userModel.aggregate(query);
     } catch (error) {
       console.log(error);
       throw error;

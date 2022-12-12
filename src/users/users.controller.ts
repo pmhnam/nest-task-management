@@ -8,12 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { pick } from 'src/utils/function';
 import { CreateUserDto } from './dto/create-user.dto';
 import { DeleteBulkUserDto } from './dto/delete-bulk-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { QueryUserDto } from './dto/query-user-dto';
 import { UpdateBulkUserDto } from './dto/update-bulk-user-dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -30,26 +32,26 @@ export class UsersController {
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string) {
-    const user = this.userService.findOne(id);
-    return { message: 'Success', data: user };
+  async findOne(@Param('id') id: string) {
+    const data = await this.userService.findOne(id);
+    return { message: 'Success', data };
   }
 
   @Get('/')
-  findAll(@Query() query: QueryUserDto) {
-    const data = this.userService.findAll(query);
+  async findAll(@Query() query: QueryUserDto) {
+    const data = await this.userService.findAll(query);
     return { message: 'Success', data };
   }
 
   @Patch('/:id')
-  update(@Param() id: string, @Body() updateUserDto: UpdateUserDto) {
-    this.userService.update(id, updateUserDto);
-    return { message: 'Success' };
+  async update(@Param() id: string, @Body() updateUserDto: UpdateUserDto) {
+    const data = await this.userService.update(id, updateUserDto);
+    return { message: 'Success', data };
   }
 
   @Patch('/')
-  updateMany(@Body() payload: UpdateBulkUserDto) {
-    this.userService.updateBulk(payload);
+  async updateMany(@Body() payload: UpdateBulkUserDto) {
+    await this.userService.updateBulk(payload);
     return { message: 'Success' };
   }
 
