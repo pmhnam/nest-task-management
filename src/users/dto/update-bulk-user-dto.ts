@@ -1,18 +1,9 @@
-import { Transform } from 'class-transformer';
-import { ArrayMinSize, IsMongoId, IsOptional, IsString } from 'class-validator';
+import { ArrayMinSize, IsMongoId } from 'class-validator';
+import { CreateUserDto } from './create-user.dto';
+import { PartialType } from '@nestjs/mapped-types';
 
-export class UpdateBulkUserDto {
+export class UpdateBulkUserDto extends PartialType(CreateUserDto) {
   @IsMongoId({ each: true })
   @ArrayMinSize(1)
   ids: string[];
-
-  @IsOptional()
-  @IsString()
-  @Transform(({ value }) => String(value))
-  username: string;
-
-  @IsOptional()
-  @IsString()
-  @Transform(({ value }) => String(value))
-  password: string;
 }

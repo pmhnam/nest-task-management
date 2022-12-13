@@ -64,11 +64,12 @@ export class UsersService {
 
   update = async (id: string, updateUserDto: UpdateUserDto): Promise<User> => {
     try {
-      const user = await this.userModel.findByIdAndUpdate(id, updateUserDto);
+      const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, {
+        new: true,
+      });
       if (!user) {
         throw new Error('User not found');
       }
-      await user.save();
       return user;
     } catch (error) {
       console.log(error);
@@ -81,7 +82,7 @@ export class UsersService {
     ...payload
   }: UpdateBulkUserDto): Promise<boolean> => {
     try {
-      this.userModel.updateMany({ _id: { $in: ids } }, payload);
+      await this.userModel.updateMany({ _id: { $in: ids } }, payload);
       return true;
     } catch (error) {
       console.log(error);

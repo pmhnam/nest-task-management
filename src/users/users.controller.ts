@@ -8,14 +8,12 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { pick } from 'src/utils/function';
 import { CreateUserDto } from './dto/create-user.dto';
 import { DeleteBulkUserDto } from './dto/delete-bulk-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import { QueryUserDto } from './dto/query-user-dto';
 import { UpdateBulkUserDto } from './dto/update-bulk-user-dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -44,7 +42,7 @@ export class UsersController {
   }
 
   @Patch('/:id')
-  async update(@Param() id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const data = await this.userService.update(id, updateUserDto);
     return { message: 'Success', data };
   }
@@ -56,7 +54,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  delete(@Param() id: DeleteUserDto) {
+  delete(@Param('id') id: DeleteUserDto) {
     this.userService.delete(id);
     return { message: 'Success' };
   }
