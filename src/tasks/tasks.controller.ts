@@ -14,7 +14,9 @@ import GetTasksFilterDto from './dto/get-task-filter.dto';
 import TaskStatusValidationPipe from './pipes/task-status-validation.pipe';
 import { ITask, TaskStatus } from './task.model';
 import { TasksService } from './tasks.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tasks')
 @Controller('tasks')
 export class TasksController {
   private tasksService: TasksService;

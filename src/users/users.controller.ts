@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { DeleteBulkUserDto } from './dto/delete-bulk-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
@@ -15,7 +16,10 @@ import { QueryUserDto } from './dto/query-user-dto';
 import { UpdateBulkUserDto } from './dto/update-bulk-user-dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiTags('users')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   private userService: UsersService;
