@@ -23,9 +23,21 @@ export class UsersService {
     }
   };
 
-  findOne = async (id: string): Promise<User> => {
+  findById = async (id: string): Promise<User> => {
     try {
-      const user = this.userModel.findById(id).select('-password');
+      const user = this.userModel.findById(id);
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+  findOneByUserName = async (username: string): Promise<User> => {
+    try {
+      const user = this.userModel.findOne({ username });
       if (!user) {
         throw new Error('User not found');
       }
